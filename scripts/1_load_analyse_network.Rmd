@@ -162,7 +162,7 @@ print(cpt_list)
 We create the network woth a string of symbols (see scutarri).
 
 ```{r}
-network <- (model2network("[HD][MAR][IJ|HD][EW][TID|EW:MAR][FC][DMK][DMNT|FC:DMK][FL|IJ:TID:DMNT]"))
+network <- (model2network("[HD][MAR][IJ|HD][EW][TID|MAR:EW][FC][DMK][DMNT|FC:DMK][FL|IJ:TID:DMNT]"))
 graphviz.plot(network)
 ```
 
