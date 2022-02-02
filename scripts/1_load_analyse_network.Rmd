@@ -21,7 +21,7 @@ library(bnlearn)
 
 ```{r}
 # The path to data is relative to where the mrd file is located
-excel_path <- "../data/Markov_Blankets.xlsx"
+excel_path <- "../data/2Markov_Blankets.xlsx"
 
 # Get all the sheet names
 sheet_vector <- excel_sheets(excel_path)
@@ -162,7 +162,7 @@ print(cpt_list)
 We create the network woth a string of symbols (see scutarri).
 
 ```{r}
-network <- (model2network("[HD][IJ|HD][EW][TID|EW][FC][DMK][DMNT|FC:DMK][FL|IJ:TID:DMNT]"))
+network <- (model2network("[HD][MAR][IJ|HD][EW][TID|EW:MAR][FC][DMK][DMNT|FC:DMK][FL|IJ:TID:DMNT]"))
 graphviz.plot(network)
 ```
 
