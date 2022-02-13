@@ -30,8 +30,8 @@ library(bnlearn)
 
 ```{r}
 # The path to data is relative to where the mrd file is located
-#excel_path <- "../data/Markov_Blankets.xlsx" 
-excel_path <- "/Users/imogenhobbs/Library/Mobile Documents/com~apple~CloudDocs/Theme 1 ResNet/MSc_Renewable_Resources/R/data/2Markov_Blankets.xlsx"
+excel_path <- "../data/2Markov_Blankets.xlsx"
+# excel_path <- "/Users/imogenhobbs/Library/Mobile Documents/com~apple~CloudDocs/Theme 1 ResNet/MSc_Renewable_Resources/R/data/2Markov_Blankets.xlsx"
 
 # Get all the sheet names
 sheet_vector <- excel_sheets(excel_path)
@@ -173,7 +173,7 @@ We create the network with a string of symbols (see
 Scutari).
 
 ```{r}
-network <- (model2network("[HD][IJ|HD][EW][MAR][TID|EW:MAR][FC][DMK][DMNT|FC:DMK][FL|IJ:TID:DMNT]"))
+network <- (model2network("[HD][MAR][IJ|HD][EW][TID|MAR:EW][FC][DMK][DMNT|FC:DMK][FL|IJ:TID:DMNT]"))
 graphviz.plot(network)
 ```
 
@@ -223,7 +223,7 @@ junction <- compile(as.grain(bn))
 
 "Then, we set the evidence to on the node," in this case, fixing it to Low, "with probability 1 with setEvidence()"
 ```{r}
-jDMNT <- setEvidence(junction, nodes = "DMNT", states = "Low")
+jDMNT <- setEvidence(junction, nodes = "DMNT", states = "High")
 ```
 
 "And after that, we can perform our conditional probability query with querygrain(), which also takes care of the belief propagation."
@@ -235,7 +235,7 @@ print(TIDxIJ.cpt)
 Let's try it with Flood-risk (FL), with the evidence on Decision-Maker Knowledge being High and Low:
 ```{r}
 #High
-jDMK <- setEvidence(junction, nodes = "DMK", states = "High")
+jDMK <- setEvidence(junction, nodes = "DMK", states = "High") # INCORRECT STATES
 FL.cpt <- querygrain(jDMK, nodes = c("FL"), type = "joint")
 print(FL.cpt)
 
@@ -279,4 +279,41 @@ print(FL.cpt)
 jFC <-setEvidence(junction, nodes = "FC", states = "Below_Average")
 FL.cpt <- querygrain(jDMNT, nodes = c("FL"), type = "joint")
 print(FL.cpt)
+```
+
+# Combinations
+
+```{r}
+perms <- gtools::permutations(2, 8, repeats.allowed = T)
+perms_list <- lapply(apply(perms, MARGIN = 1, list), unlist)
+
+generate_combination <- function(vec, graph = junction){
+  levels <- graph$universe$levels
+  levels <- levels[names(levels) != "FL" ]
+  smpl <- mapply(levels, vec, FUN = `[`)
+  prop_graph <- setEvidence(graph, nodes = names(smpl),
+                            states = unname(smpl))
+  return(prop_graph)
+}
+
+graph_list <- lapply(perms_list, FUN = generate_combination)
+FL <- lapply(graph_list, function(x) c(querygrain(x, nodes = c("FL"))[[1]])) 
+scores <- unlist(lapply(FL, function(x) x[2]))
+max_ids <- which(scores == max(scores))
+percent <- (length(max_ids)/length(perms_list))*100
+
+bests <- graph_list[max_ids]
+
+evidences <- lapply(bests, function(x) getEvidence(x))
+evidences_dfs <- lapply(evidences, function(x){
+  df <- as.data.frame(x)[, c("nodes", "hard.state")]
+})
+all_evidence <- dplyr::bind_rows(evidences_dfs)
+table(all_evidence)
+all_evidence_ar <- as.data.frame(table(all_evidence)) %>% 
+    dplyr::arrange(desc(Freq), nodes, decreasing = F)
+
+filtered <- all_evidence_ar %>% 
+  dplyr::mutate(imp = Freq/length(bests)*100) %>% 
+  dplyr::filter(Freq !=0)
 ```
