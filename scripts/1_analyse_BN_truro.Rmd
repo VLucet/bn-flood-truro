@@ -244,12 +244,19 @@ percent <- (length(max_ids)/length(perms_list))*100
 
 bests <- graph_list[max_ids]
 
+# > length(bests)
+# [1] 32
+```
+
+We find that 32 scenarios maximize below average flood risk. Lets look at their evidence.
+
+```{r}
 evidences <- lapply(bests, function(x) getEvidence(x))
 evidences_dfs <- lapply(evidences, function(x){
   df <- as.data.frame(x)[, c("nodes", "hard_state")]
 })
 all_evidence <- dplyr::bind_rows(evidences_dfs)
-table(all_evidence)
+
 all_evidence_ar <- as.data.frame(table(all_evidence)) %>% 
     dplyr::arrange(desc(Freq), nodes, decreasing = F)
 

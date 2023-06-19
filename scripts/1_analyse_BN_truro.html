@@ -893,43 +893,17 @@ percent &lt;- (length(max_ids)/length(perms_list))*100
 
 bests &lt;- graph_list[max_ids]
 
-evidences &lt;- lapply(bests, function(x) getEvidence(x))
+# &gt; length(bests)
+# [1] 32</code></pre>
+<p>We find that 32 scenarios maximize below average flood risk. Lets
+look at their evidence.</p>
+<pre class="r"><code>evidences &lt;- lapply(bests, function(x) getEvidence(x))
 evidences_dfs &lt;- lapply(evidences, function(x){
   df &lt;- as.data.frame(x)[, c(&quot;nodes&quot;, &quot;hard_state&quot;)]
 })
 all_evidence &lt;- dplyr::bind_rows(evidences_dfs)
-table(all_evidence)</code></pre>
-<pre><code>##       hard_state
-## nodes  Above_Average_EW Above_Average_FC Absent_MAR Below_Average_EW
-##   DMK                 0                0          0                0
-##   DMNT                0                0          0                0
-##   EW                 16                0          0               16
-##   FC                  0               16          0                0
-##   HD                  0                0          0                0
-##   IJ                  0                0          0                0
-##   MAR                 0                0         16                0
-##   TID                 0                0          0                0
-##       hard_state
-## nodes  Below_Average_FC Below_Average_IJ Below_Average_TID Expansion High_DMK
-##   DMK                 0                0                 0         0       16
-##   DMNT                0                0                 0         0        0
-##   EW                  0                0                 0         0        0
-##   FC                 16                0                 0         0        0
-##   HD                  0                0                 0        16        0
-##   IJ                  0               32                 0         0        0
-##   MAR                 0                0                 0         0        0
-##   TID                 0                0                32         0        0
-##       hard_state
-## nodes  Low_DMK Present_MAR Removed Return_to_Marshland
-##   DMK       16           0       0                   0
-##   DMNT       0           0      32                   0
-##   EW         0           0       0                   0
-##   FC         0           0       0                   0
-##   HD         0           0       0                  16
-##   IJ         0           0       0                   0
-##   MAR        0          16       0                   0
-##   TID        0           0       0                   0</code></pre>
-<pre class="r"><code>all_evidence_ar &lt;- as.data.frame(table(all_evidence)) %&gt;% 
+
+all_evidence_ar &lt;- as.data.frame(table(all_evidence)) %&gt;% 
     dplyr::arrange(desc(Freq), nodes, decreasing = F)
 
 filtered &lt;- all_evidence_ar %&gt;% 
