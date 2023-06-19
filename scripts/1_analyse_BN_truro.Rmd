@@ -149,12 +149,12 @@ print(FL.cpt2)
 ```{r}
 #High
 jIJ <- setEvidence(junction, nodes = "IJ", states = "Above_Average_IJ")
-FLxTID.cpt <- querygrain(jIJ, nodes = c("FL","TID"), type = "joint")
+FLxTID.cpt <- querygrain(jIJ, nodes = c("FL"), type = "joint")
 print(FLxTID.cpt)
 
 #Low
 jIJ2 <- setEvidence(junction, nodes = "IJ", states = "Below_Average_IJ")
-FLxTID.cpt2 <- querygrain(jIJ2, nodes = c("FL","TID"), type = "joint")
+FLxTID.cpt2 <- querygrain(jIJ2, nodes = c("FL"), type = "joint")
 print(FLxTID.cpt2)
 
 ```

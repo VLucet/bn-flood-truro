@@ -775,20 +775,18 @@ print(FL.cpt2)</code></pre>
 ##        0.3669669        0.6330331</code></pre>
 <pre class="r"><code>#High
 jIJ &lt;- setEvidence(junction, nodes = &quot;IJ&quot;, states = &quot;Above_Average_IJ&quot;)
-FLxTID.cpt &lt;- querygrain(jIJ, nodes = c(&quot;FL&quot;,&quot;TID&quot;), type = &quot;joint&quot;)
+FLxTID.cpt &lt;- querygrain(jIJ, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
 print(FLxTID.cpt)</code></pre>
-<pre><code>##                   TID
-## FL                 Above_Average_TID Below_Average_TID
-##   Above_Average_FL          0.141859          0.309309
-##   Below_Average_FL          0.175641          0.373191</code></pre>
+<pre><code>## FL
+## Above_Average_FL Below_Average_FL 
+##         0.451168         0.548832</code></pre>
 <pre class="r"><code>#Low
 jIJ2 &lt;- setEvidence(junction, nodes = &quot;IJ&quot;, states = &quot;Below_Average_IJ&quot;)
-FLxTID.cpt2 &lt;- querygrain(jIJ2, nodes = c(&quot;FL&quot;,&quot;TID&quot;), type = &quot;joint&quot;)
+FLxTID.cpt2 &lt;- querygrain(jIJ2, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
 print(FLxTID.cpt2)</code></pre>
-<pre><code>##                   TID
-## FL                 Above_Average_TID Below_Average_TID
-##   Above_Average_FL          0.143891          0.172809
-##   Below_Average_FL          0.173609          0.509691</code></pre>
+<pre><code>## FL
+## Above_Average_FL Below_Average_FL 
+##           0.3167           0.6833</code></pre>
 <pre class="r"><code>#Dyke Management
 jDMNT &lt;- setEvidence(junction, nodes = &quot;DMNT&quot;, states = &quot;Removed&quot;)
 FL.cpt &lt;- querygrain(jDMNT, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
