@@ -3,7 +3,6 @@ title: "Load and Analyse Truro Network"
 author: "Valentin Lucet & Imogen Hobbs"
 date: "28/12/2021"
 output:
-  pdf_document: default
   html_document: default
 ---
 
