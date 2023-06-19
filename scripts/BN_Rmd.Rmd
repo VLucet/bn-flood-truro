@@ -1,17 +1,10 @@
 ---
-title: "BN_Analysis"
-author: "Imogen Hobbs & Valentin Lucet"
+title: "Load and Analyse Truro Network"
+author: "Valentin Lucet & Imogen Hobbs"
 date: "28/12/2021"
 output:
   pdf_document: default
   html_document: default
----
-
----
-title: "Load and Analyse Truro Network"
-author: "Valentin Lucet & Imogen Hobbs"
-date: "23/12/2021"
-output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -57,108 +50,12 @@ We want to transform the data into probability tables for bnlearn
 - tables 1-: simple conversion to matrix with some cleaning steps
 - tables 7-8: is 3 and 4-way so more wrangling is needed
 
-The following function works but the implementation is very far from ideal, as it doesn't properly model the recursion present in the data, and naively uses switch cases. But it will do for this use case.
 ```{r}
-clean_tables <- function(tbl, element_names = "tmp"){
-  
-  if ("tbl_df" %in% class(tbl)){
-    tbl_rownames <- unname(unlist(as.data.frame(tbl[,1])))
-    tbl <- as.matrix(tbl[,-1])
-    rownames(tbl) <- tbl_rownames
-  }
-  
-  if (ncol(tbl) == 1){
-    
-    tmp_list <- list(tmp = rownames(tbl))
-    names(tmp_list) <- element_names
-    result <- array(tbl, dim = 2, dimnames = (tmp_list))
-    
-  } else if (ncol(tbl) == 2){
-    
-    temp_list <- list(tmp = rownames(tbl), tmp2 = colnames(tbl))
-    names(temp_list) <- element_names
-    dimnames(tbl) <- temp_list
-    result <- tbl
-    
-  } else if (ncol(tbl) == 4){
-    
-    all_names <- colnames(tbl)
-    
-    third_dim_list <- lapply(strsplit(all_names, ":"), `[`, 2)
-    second_dim_list <- lapply(strsplit(all_names, ":"), `[`, 1)
-    
-    third_dim <- unlist(third_dim_list)
-    second_dim <- unlist(second_dim_list)
-    
-    third_dim_levels <- unique(third_dim)
-    second_dim_levels <- unique(second_dim)
-    
-    index <- which(third_dim == third_dim_levels[1])
-    split_1 <- tbl[, c(index)]
-    colnames(split_1) <- second_dim[index]
-    
-    index_2 <- which(third_dim == third_dim_levels[2])
-    split_2 <- tbl[, c(index_2)]
-    colnames(split_2) <- third_dim[index_2]
-    
-    split_1 <- clean_tables(split_1, element_names[c(1,2)])
-    split_2 <- clean_tables(split_2, element_names[c(1,3)])
-    
-    stopifnot(rownames(split_1) == rownames(split_2))
-    list_dim_names <- list(first = rownames(split_1), 
-                           second = second_dim_levels, 
-                           third = third_dim_levels)
-    
-    names(list_dim_names) <- element_names
-    result <- array(c(split_1, split_2), dim = c(2,2,2), 
-                    dimnames = list_dim_names)
-    
-  } else if (ncol(tbl == 8)) {
-    
-    all_names <- colnames(tbl)
-    
-    fourth_dim_list <- lapply(strsplit(all_names, ":"), `[`, 3)
-    third_dim_list <- lapply(strsplit(all_names, ":"), `[`, 2)
-    second_dim_list <- lapply(strsplit(all_names, ":"), `[`, 1)
-    
-    fourth_dim <- unlist(fourth_dim_list)
-    third_dim <- unlist(third_dim_list)
-    second_dim <- unlist(second_dim_list)
-    
-    fourth_dim_levels <- unique(fourth_dim)
-    third_dim_levels <- unique(third_dim)
-    second_dim_levels <- unique(second_dim)
-    
-    index <- which(fourth_dim == fourth_dim_levels[1])
-    split_1 <- tbl[, c(index)]
-    colnames(split_1) <- c(paste0(second_dim[index], ":", third_dim[index]))
-    
-    index_2 <-  which(fourth_dim == fourth_dim_levels[2])
-    split_2 <- tbl[, c(index_2)]
-    colnames(split_2) <- c(paste0(second_dim[index_2], ":", third_dim[index_2]))
-    
-    split_1_clean <- clean_tables(split_1, element_names[c(1,2,3)])
-    split_2_clean <- clean_tables(split_2, element_names[c(1,2,3)])
-    
-    stopifnot(rownames(split_1_clean[,,1]) == rownames(split_2_clean[,,1])) ==
-      stopifnot(rownames(split_1_clean[,,2]) == rownames(split_2_clean[,,2]))
-    
-    list_dim_names <- list(first = rownames(split_1_clean), 
-                           second = second_dim_levels, 
-                           third = third_dim_levels, 
-                           fourth = fourth_dim_levels)
-    
-    names(list_dim_names) <- element_names
-    result <- array(c(split_1_clean, split_2_clean), dim = c(2,2,2,2), 
-                    dimnames = list_dim_names)
-    
-  }
-  
-  return(result)
-}
+source("0_functions.R")
 ```
 
-We apply the function to all the sheets
+We apply the function `clean_tables` to all the sheets.
+
 ```{r}
 cpt_list <- mapply(FUN = clean_tables, 
                    tbl = dat_list, 
@@ -180,11 +77,11 @@ graphviz.plot(network)
 
 # Fitting
 
-We can now fit the network
+We can now fit the network: 
+
 ```{r}
 bn <- bnlearn::custom.fit(network, cpt_list)
 print(bn)
-
 ```
 
 # Belief Propagation
@@ -196,9 +93,11 @@ to use an Exact Algorithm with Junction Trees. Junction Trees are are popular me
 Junction Trees require that the network be **moralised**, that is, an undirected graph, where each node is now connected to its Markov Blanket. 
 
 Let's moralise our BN:
+
 ```{r}
 graphviz.plot(moral(network))
 ```
+
 From this moral graph, we can isolate 4 Cliques:
 C1 = {DMK, FC, DMNT}
 C2 = {DMNT,TID, IJ}
@@ -210,110 +109,76 @@ S12 = {DMNT}
 S14= {DMNT}
 S23 = {TID, IJ}
 
-The following section has quotes from the Oxford Bayesian Analysis powerpoint made by Scutari (2017)
+The following section has quotes from Oxford Bayesian Analysis by Scutari (2017).
 
 Let's say we want to see what happens to the distribution of Tides (TID) and Ice Jams (IJ) given the evidence that DMNT is "Low."
 
-"First, we convert the BN from *bnlearn* to its equivalent in *gRain* with as.grain() and we construct the junction tree with compile()" 
-(As a side note, I needed to install the RBGL package using BiocManager, as my version of R is newer than the powerpoint version)
+"First, we convert the BN from *bnlearn* to its equivalent in *gRain* with as.grain() and we construct the junction tree with compile()"
+
 ```{r}
 library(gRain)
 junction <- compile(as.grain(bn))
 ```
 
-"Then, we set the evidence to on the node," in this case, fixing it to Low, "with probability 1 with setEvidence()"
+"Then, we set the evidence to on the node," in this case, fixing it to Low, "with probability 1 with `setEvidence()`"
+
 ```{r}
 jDMNT <- setEvidence(junction, nodes = "DMNT", states = "High")
 ```
 
 "And after that, we can perform our conditional probability query with querygrain(), which also takes care of the belief propagation."
+
 ```{r}
 TIDxIJ.cpt <- querygrain(jDMNT, nodes = c("TID", "IJ"), type = "joint")
 print(TIDxIJ.cpt)
 ```
 
-Let's try it with Flood-risk (FL), with the evidence on Decision-Maker Knowledge being High and Low:
+Let's try it with Flood-risk (FL), with the evidence being set on different variables:
+
 ```{r}
 #High
-jDMK <- setEvidence(junction, nodes = "DMK", states = "High") # INCORRECT STATES
+jDMK <- setEvidence(junction, nodes = "DMK", states = "High_DMK")
 FL.cpt <- querygrain(jDMK, nodes = c("FL"), type = "joint")
 print(FL.cpt)
 
 #Low
-jDMK <- setEvidence(junction, nodes = "DMK", states = "Low")
-FL.cpt <- querygrain(jDMK, nodes = c("FL"), type = "joint")
-print(FL.cpt)
+jDMK2 <- setEvidence(junction, nodes = "DMK", states = "Low_DMK")
+FL.cpt2 <- querygrain(jDMK2, nodes = c("FL"), type = "joint")
+print(FL.cpt2)
 ```
 
-More playing around
 ```{r}
 #High
-jIJ <- setEvidence(junction, nodes = "IJ", states = "Above_Average")
+jIJ <- setEvidence(junction, nodes = "IJ", states = "Above_Average_IJ")
 FLxTID.cpt <- querygrain(jIJ, nodes = c("FL","TID"), type = "joint")
 print(FLxTID.cpt)
 
 #Low
-jIJ <- setEvidence(junction, nodes = "IJ", states = "Below_Average")
-FLxTID.cpt <- querygrain(jIJ, nodes = c("FL","TID"), type = "joint")
-print(FLxTID.cpt)
+jIJ2 <- setEvidence(junction, nodes = "IJ", states = "Below_Average_IJ")
+FLxTID.cpt2 <- querygrain(jIJ2, nodes = c("FL","TID"), type = "joint")
+print(FLxTID.cpt2)
 
 ```
 
-Focusing on Flood-Risk
 ```{r}
 #Dyke Management
 jDMNT <- setEvidence(junction, nodes = "DMNT", states = "Removed")
 FL.cpt <- querygrain(jDMNT, nodes = c("FL"), type = "joint")
 print(FL.cpt)
 
-jDMNT <- setEvidence(junction, nodes = "DMNT", states = "Maintained")
-FL.cpt <- querygrain(jDMNT, nodes = c("FL"), type = "joint")
-print(FL.cpt)
+jDMNT2 <- setEvidence(junction, nodes = "DMNT", states = "Maintained")
+FL.cpt2 <- querygrain(jDMNT2, nodes = c("FL"), type = "joint")
+print(FL.cpt2)
+```
 
+```{r}
 #Financial Constraints
 jFC <- setEvidence(junction, nodes = "FC", states = "Above_Average")
 FL.cpt <- querygrain(jFC, nodes = c("FL"), type = "joint")
 print(FL.cpt)
 
 
-jFC <-setEvidence(junction, nodes = "FC", states = "Below_Average")
-FL.cpt <- querygrain(jDMNT, nodes = c("FL"), type = "joint")
-print(FL.cpt)
-```
-
-# Combinations
-
-```{r}
-perms <- gtools::permutations(2, 8, repeats.allowed = T)
-perms_list <- lapply(apply(perms, MARGIN = 1, list), unlist)
-
-generate_combination <- function(vec, graph = junction){
-  levels <- graph$universe$levels
-  levels <- levels[names(levels) != "FL" ]
-  smpl <- mapply(levels, vec, FUN = `[`)
-  prop_graph <- setEvidence(graph, nodes = names(smpl),
-                            states = unname(smpl))
-  return(prop_graph)
-}
-
-graph_list <- lapply(perms_list, FUN = generate_combination)
-FL <- lapply(graph_list, function(x) c(querygrain(x, nodes = c("FL"))[[1]])) 
-scores <- unlist(lapply(FL, function(x) x[2]))
-max_ids <- which(scores == max(scores))
-percent <- (length(max_ids)/length(perms_list))*100
-
-bests <- graph_list[max_ids]
-
-evidences <- lapply(bests, function(x) getEvidence(x))
-evidences_dfs <- lapply(evidences, function(x){
-  df <- as.data.frame(x)[, c("nodes", "hard.state")]
-})
-all_evidence <- dplyr::bind_rows(evidences_dfs)
-table(all_evidence)
-all_evidence_ar <- as.data.frame(table(all_evidence)) %>% 
-    dplyr::arrange(desc(Freq), nodes, decreasing = F)
-
-filtered <- all_evidence_ar %>% 
-  dplyr::mutate(imp = Freq/length(bests)*100) %>% 
-  dplyr::filter(Freq !=0)
+jFC2 <-setEvidence(junction, nodes = "FC", states = "Below_Average")
+FL.cpt2 <- querygrain(jDMNT2, nodes = c("FL"), type = "joint")
+print(FL.cpt2)
 ```
