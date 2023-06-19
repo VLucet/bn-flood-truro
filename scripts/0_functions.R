@@ -100,6 +100,9 @@ clean_tables <- function(tbl, element_names = "tmp"){
   return(result)
 }
 
+# The following function generates a evidenced graph from a given input 
+# vector of possibles states
+
 generate_combination <- function(vec, graph = junction){
   levels <- graph$universe$levels
   levels <- levels[names(levels) != "FL" ]

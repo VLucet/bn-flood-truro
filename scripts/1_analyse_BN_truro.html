@@ -880,6 +880,78 @@ print(round(FLxIJcpt2, 2))</code></pre>
 ## Above_Average_FL Below_Average_FL 
 ##             0.32             0.68</code></pre>
 </div>
+<div id="scenarios-by-permutations" class="section level1">
+<h1>Scenarios by permutations</h1>
+<pre class="r"><code>perms &lt;- gtools::permutations(2, 8, repeats.allowed = T)
+perms_list &lt;- lapply(apply(perms, MARGIN = 1, list), unlist)
+
+graph_list &lt;- lapply(perms_list, FUN = generate_combination)
+FL &lt;- lapply(graph_list, function(x) c(querygrain(x, nodes = c(&quot;FL&quot;))[[1]])) 
+scores &lt;- unlist(lapply(FL, function(x) x[2]))
+max_ids &lt;- which(scores == max(scores))
+percent &lt;- (length(max_ids)/length(perms_list))*100
+
+bests &lt;- graph_list[max_ids]
+
+evidences &lt;- lapply(bests, function(x) getEvidence(x))
+evidences_dfs &lt;- lapply(evidences, function(x){
+  df &lt;- as.data.frame(x)[, c(&quot;nodes&quot;, &quot;hard_state&quot;)]
+})
+all_evidence &lt;- dplyr::bind_rows(evidences_dfs)
+table(all_evidence)</code></pre>
+<pre><code>##       hard_state
+## nodes  Above_Average_EW Above_Average_FC Absent_MAR Below_Average_EW
+##   DMK                 0                0          0                0
+##   DMNT                0                0          0                0
+##   EW                 16                0          0               16
+##   FC                  0               16          0                0
+##   HD                  0                0          0                0
+##   IJ                  0                0          0                0
+##   MAR                 0                0         16                0
+##   TID                 0                0          0                0
+##       hard_state
+## nodes  Below_Average_FC Below_Average_IJ Below_Average_TID Expansion High_DMK
+##   DMK                 0                0                 0         0       16
+##   DMNT                0                0                 0         0        0
+##   EW                  0                0                 0         0        0
+##   FC                 16                0                 0         0        0
+##   HD                  0                0                 0        16        0
+##   IJ                  0               32                 0         0        0
+##   MAR                 0                0                 0         0        0
+##   TID                 0                0                32         0        0
+##       hard_state
+## nodes  Low_DMK Present_MAR Removed Return_to_Marshland
+##   DMK       16           0       0                   0
+##   DMNT       0           0      32                   0
+##   EW         0           0       0                   0
+##   FC         0           0       0                   0
+##   HD         0           0       0                  16
+##   IJ         0           0       0                   0
+##   MAR        0          16       0                   0
+##   TID        0           0       0                   0</code></pre>
+<pre class="r"><code>all_evidence_ar &lt;- as.data.frame(table(all_evidence)) %&gt;% 
+    dplyr::arrange(desc(Freq), nodes, decreasing = F)
+
+filtered &lt;- all_evidence_ar %&gt;% 
+  dplyr::mutate(imp = Freq/length(bests)*100) %&gt;% 
+  dplyr::filter(Freq !=0)
+
+print(filtered)</code></pre>
+<pre><code>##    nodes          hard_state Freq imp
+## 1   DMNT             Removed   32 100
+## 2     IJ    Below_Average_IJ   32 100
+## 3    TID   Below_Average_TID   32 100
+## 4    DMK            High_DMK   16  50
+## 5    DMK             Low_DMK   16  50
+## 6     EW    Above_Average_EW   16  50
+## 7     EW    Below_Average_EW   16  50
+## 8     FC    Above_Average_FC   16  50
+## 9     FC    Below_Average_FC   16  50
+## 10    HD           Expansion   16  50
+## 11    HD Return_to_Marshland   16  50
+## 12   MAR          Absent_MAR   16  50
+## 13   MAR         Present_MAR   16  50</code></pre>
+</div>
 
 
 
