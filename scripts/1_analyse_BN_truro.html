@@ -759,60 +759,126 @@ print(TIDxIJ.cpt)</code></pre>
 ##   Below_Average_IJ           0.20955           0.45045</code></pre>
 <p>Let’s try it with Flood-risk (FL), with the evidence being set on
 different variables:</p>
-<pre class="r"><code>#High
-jDMK &lt;- setEvidence(junction, nodes = &quot;DMK&quot;, states = &quot;High_DMK&quot;)
-FL.cpt &lt;- querygrain(jDMK, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
-print(FL.cpt)</code></pre>
+<ol style="list-style-type: decimal">
+<li>Decision maker knowledge:</li>
+</ol>
+<pre class="r"><code>jDMK &lt;- setEvidence(junction, nodes = &quot;DMK&quot;, states = &quot;High_DMK&quot;)
+FLxDMKcpt &lt;- querygrain(jDMK, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
+print(round(FLxDMKcpt, 2))</code></pre>
 <pre><code>## FL
 ## Above_Average_FL Below_Average_FL 
-##         0.344228         0.655772</code></pre>
-<pre class="r"><code>#Low
-jDMK2 &lt;- setEvidence(junction, nodes = &quot;DMK&quot;, states = &quot;Low_DMK&quot;)
-FL.cpt2 &lt;- querygrain(jDMK2, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
-print(FL.cpt2)</code></pre>
+##             0.34             0.66</code></pre>
+<pre class="r"><code>jDMK2 &lt;- setEvidence(junction, nodes = &quot;DMK&quot;, states = &quot;Low_DMK&quot;)
+FLxDMKcpt2 &lt;- querygrain(jDMK2, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
+print(round(FLxDMKcpt2, 2))</code></pre>
 <pre><code>## FL
 ## Above_Average_FL Below_Average_FL 
-##        0.3669669        0.6330331</code></pre>
-<pre class="r"><code>#High
-jIJ &lt;- setEvidence(junction, nodes = &quot;IJ&quot;, states = &quot;Above_Average_IJ&quot;)
-FLxTID.cpt &lt;- querygrain(jIJ, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
-print(FLxTID.cpt)</code></pre>
+##             0.37             0.63</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Human development:</li>
+</ol>
+<pre class="r"><code>jHD &lt;- setEvidence(junction, nodes = &quot;HD&quot;, states = &quot;Expansion&quot;)
+FLxHDcpt &lt;- querygrain(jHD, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
+print(round(FLxHDcpt, 2))</code></pre>
 <pre><code>## FL
 ## Above_Average_FL Below_Average_FL 
-##         0.451168         0.548832</code></pre>
-<pre class="r"><code>#Low
-jIJ2 &lt;- setEvidence(junction, nodes = &quot;IJ&quot;, states = &quot;Below_Average_IJ&quot;)
-FLxTID.cpt2 &lt;- querygrain(jIJ2, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
-print(FLxTID.cpt2)</code></pre>
+##             0.41             0.59</code></pre>
+<pre class="r"><code>jHD2 &lt;- setEvidence(junction, nodes = &quot;HD&quot;, states = &quot;Return_to_Marshland&quot;)
+FLxHDcpt2 &lt;- querygrain(jHD2, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
+print(round(FLxHDcpt2, 2))</code></pre>
 <pre><code>## FL
 ## Above_Average_FL Below_Average_FL 
-##           0.3167           0.6833</code></pre>
-<pre class="r"><code>#Dyke Management
-jDMNT &lt;- setEvidence(junction, nodes = &quot;DMNT&quot;, states = &quot;Removed&quot;)
-FL.cpt &lt;- querygrain(jDMNT, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
-print(FL.cpt)</code></pre>
+##             0.36             0.64</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Dyke Maintenance</li>
+</ol>
+<pre class="r"><code>jDMNT &lt;- setEvidence(junction, nodes = &quot;DMNT&quot;, states = &quot;Maintained&quot;)
+FLxDMNTcpt &lt;- querygrain(jDMNT, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
+print(round(FLxDMNTcpt, 2))</code></pre>
 <pre><code>## FL
 ## Above_Average_FL Below_Average_FL 
-##         0.320705         0.679295</code></pre>
-<pre class="r"><code>jDMNT2 &lt;- setEvidence(junction, nodes = &quot;DMNT&quot;, states = &quot;Maintained&quot;)
-FL.cpt2 &lt;- querygrain(jDMNT2, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
-print(FL.cpt2)</code></pre>
+##              0.4              0.6</code></pre>
+<pre class="r"><code>jDMNT2 &lt;- setEvidence(junction, nodes = &quot;DMNT&quot;, states = &quot;Removed&quot;)
+FLxDMNTcpt2 &lt;- querygrain(jDMNT2, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
+print(round(FLxDMNTcpt2, 2))</code></pre>
 <pre><code>## FL
 ## Above_Average_FL Below_Average_FL 
-##         0.399115         0.600885</code></pre>
-<pre class="r"><code>#Financial Constraints
-jFC &lt;- setEvidence(junction, nodes = &quot;FC&quot;, states = &quot;Above_Average&quot;)
-FL.cpt &lt;- querygrain(jFC, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
-print(FL.cpt)</code></pre>
+##             0.32             0.68</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Financial Constraints</li>
+</ol>
+<pre class="r"><code>jFC &lt;- setEvidence(junction, nodes = &quot;FC&quot;, states = &quot;Above_Average&quot;)
+FLxFCcpt &lt;- querygrain(jFC, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
+print(round(FLxFCcpt, 2))</code></pre>
 <pre><code>## FL
 ## Above_Average_FL Below_Average_FL 
-##        0.3624191        0.6375809</code></pre>
+##             0.36             0.64</code></pre>
 <pre class="r"><code>jFC2 &lt;-setEvidence(junction, nodes = &quot;FC&quot;, states = &quot;Below_Average&quot;)
-FL.cpt2 &lt;- querygrain(jDMNT2, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
-print(FL.cpt2)</code></pre>
+FLxFCcpt2 &lt;- querygrain(jDMNT2, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
+print(round(FLxFCcpt2, 2))</code></pre>
 <pre><code>## FL
 ## Above_Average_FL Below_Average_FL 
-##         0.399115         0.600885</code></pre>
+##             0.32             0.68</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>Tide frequency</li>
+</ol>
+<pre class="r"><code>jTF &lt;- setEvidence(junction, nodes = &quot;TID&quot;, states = &quot;Above_Average_TID&quot;)
+FLxTFcpt &lt;- querygrain(jTF, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
+print(round(FLxTFcpt, 2))</code></pre>
+<pre><code>## FL
+## Above_Average_FL Below_Average_FL 
+##             0.45             0.55</code></pre>
+<pre class="r"><code>jTF2 &lt;-setEvidence(junction, nodes = &quot;TID&quot;, states = &quot;Below_Average_TID&quot;)
+FLxTFcpt2 &lt;- querygrain(jTF2, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
+print(round(FLxTFcpt2, 2))</code></pre>
+<pre><code>## FL
+## Above_Average_FL Below_Average_FL 
+##             0.32             0.68</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li>Saltmarsh status</li>
+</ol>
+<pre class="r"><code>jMAR &lt;- setEvidence(junction, nodes = &quot;MAR&quot;, states = &quot;Present_MAR&quot;)
+FLxMARcpt &lt;- querygrain(jMAR, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
+print(round(FLxMARcpt, 2))</code></pre>
+<pre><code>## FL
+## Above_Average_FL Below_Average_FL 
+##             0.36             0.64</code></pre>
+<pre class="r"><code>jMAR2 &lt;-setEvidence(junction, nodes = &quot;MAR&quot;, states = &quot;Absent_MAR&quot;)
+FLxMARcpt2 &lt;- querygrain(jMAR2, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
+print(round(FLxMARcpt2, 2))</code></pre>
+<pre><code>## FL
+## Above_Average_FL Below_Average_FL 
+##             0.37             0.63</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li>Extreme weather frequency</li>
+</ol>
+<pre class="r"><code>jEW &lt;- setEvidence(junction, nodes = &quot;EW&quot;, states = &quot;Above_Average_EW&quot;)
+FLxEWcpt &lt;- querygrain(jEW, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
+print(round(FLxEWcpt, 2))</code></pre>
+<pre><code>## FL
+## Above_Average_FL Below_Average_FL 
+##             0.37             0.63</code></pre>
+<pre class="r"><code>jEW2 &lt;-setEvidence(junction, nodes = &quot;EW&quot;, states = &quot;Below_Average_EW&quot;)
+FLxEWcpt2 &lt;- querygrain(jEW2, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
+print(round(FLxEWcpt2, 2))</code></pre>
+<pre><code>## FL
+## Above_Average_FL Below_Average_FL 
+##             0.35             0.65</code></pre>
+<ol start="8" style="list-style-type: decimal">
+<li>Ice Jam frequency</li>
+</ol>
+<pre class="r"><code>jIJ &lt;- setEvidence(junction, nodes = &quot;IJ&quot;, states = &quot;Above_Average_IJ&quot;)
+FLxIJcpt &lt;- querygrain(jIJ, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
+print(round(FLxIJcpt, 2))</code></pre>
+<pre><code>## FL
+## Above_Average_FL Below_Average_FL 
+##             0.45             0.55</code></pre>
+<pre class="r"><code>jIJ2 &lt;- setEvidence(junction, nodes = &quot;IJ&quot;, states = &quot;Below_Average_IJ&quot;)
+FLxIJcpt2 &lt;- querygrain(jIJ2, nodes = c(&quot;FL&quot;), type = &quot;joint&quot;)
+print(round(FLxIJcpt2, 2))</code></pre>
+<pre><code>## FL
+## Above_Average_FL Below_Average_FL 
+##             0.32             0.68</code></pre>
 </div>
 
 

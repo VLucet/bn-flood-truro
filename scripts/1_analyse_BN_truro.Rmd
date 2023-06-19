@@ -134,50 +134,100 @@ print(TIDxIJ.cpt)
 
 Let's try it with Flood-risk (FL), with the evidence being set on different variables:
 
+1. Decision maker knowledge:
+
 ```{r}
-#High
 jDMK <- setEvidence(junction, nodes = "DMK", states = "High_DMK")
-FL.cpt <- querygrain(jDMK, nodes = c("FL"), type = "joint")
-print(FL.cpt)
+FLxDMKcpt <- querygrain(jDMK, nodes = c("FL"), type = "joint")
+print(round(FLxDMKcpt, 2))
 
-#Low
 jDMK2 <- setEvidence(junction, nodes = "DMK", states = "Low_DMK")
-FL.cpt2 <- querygrain(jDMK2, nodes = c("FL"), type = "joint")
-print(FL.cpt2)
+FLxDMKcpt2 <- querygrain(jDMK2, nodes = c("FL"), type = "joint")
+print(round(FLxDMKcpt2, 2))
 ```
 
+2. Human development:
+
 ```{r}
-#High
-jIJ <- setEvidence(junction, nodes = "IJ", states = "Above_Average_IJ")
-FLxTID.cpt <- querygrain(jIJ, nodes = c("FL"), type = "joint")
-print(FLxTID.cpt)
+jHD <- setEvidence(junction, nodes = "HD", states = "Expansion")
+FLxHDcpt <- querygrain(jHD, nodes = c("FL"), type = "joint")
+print(round(FLxHDcpt, 2))
 
-#Low
-jIJ2 <- setEvidence(junction, nodes = "IJ", states = "Below_Average_IJ")
-FLxTID.cpt2 <- querygrain(jIJ2, nodes = c("FL"), type = "joint")
-print(FLxTID.cpt2)
-
+jHD2 <- setEvidence(junction, nodes = "HD", states = "Return_to_Marshland")
+FLxHDcpt2 <- querygrain(jHD2, nodes = c("FL"), type = "joint")
+print(round(FLxHDcpt2, 2))
 ```
 
-```{r}
-#Dyke Management
-jDMNT <- setEvidence(junction, nodes = "DMNT", states = "Removed")
-FL.cpt <- querygrain(jDMNT, nodes = c("FL"), type = "joint")
-print(FL.cpt)
+3. Dyke Maintenance
 
-jDMNT2 <- setEvidence(junction, nodes = "DMNT", states = "Maintained")
-FL.cpt2 <- querygrain(jDMNT2, nodes = c("FL"), type = "joint")
-print(FL.cpt2)
+```{r}
+jDMNT <- setEvidence(junction, nodes = "DMNT", states = "Maintained")
+FLxDMNTcpt <- querygrain(jDMNT, nodes = c("FL"), type = "joint")
+print(round(FLxDMNTcpt, 2))
+
+jDMNT2 <- setEvidence(junction, nodes = "DMNT", states = "Removed")
+FLxDMNTcpt2 <- querygrain(jDMNT2, nodes = c("FL"), type = "joint")
+print(round(FLxDMNTcpt2, 2))
 ```
 
+4. Financial Constraints
+
 ```{r}
-#Financial Constraints
 jFC <- setEvidence(junction, nodes = "FC", states = "Above_Average")
-FL.cpt <- querygrain(jFC, nodes = c("FL"), type = "joint")
-print(FL.cpt)
-
+FLxFCcpt <- querygrain(jFC, nodes = c("FL"), type = "joint")
+print(round(FLxFCcpt, 2))
 
 jFC2 <-setEvidence(junction, nodes = "FC", states = "Below_Average")
-FL.cpt2 <- querygrain(jDMNT2, nodes = c("FL"), type = "joint")
-print(FL.cpt2)
+FLxFCcpt2 <- querygrain(jDMNT2, nodes = c("FL"), type = "joint")
+print(round(FLxFCcpt2, 2))
 ```
+
+5. Tide frequency
+
+```{r}
+jTF <- setEvidence(junction, nodes = "TID", states = "Above_Average_TID")
+FLxTFcpt <- querygrain(jTF, nodes = c("FL"), type = "joint")
+print(round(FLxTFcpt, 2))
+
+jTF2 <-setEvidence(junction, nodes = "TID", states = "Below_Average_TID")
+FLxTFcpt2 <- querygrain(jTF2, nodes = c("FL"), type = "joint")
+print(round(FLxTFcpt2, 2))
+```
+
+6. Saltmarsh status
+
+```{r}
+jMAR <- setEvidence(junction, nodes = "MAR", states = "Present_MAR")
+FLxMARcpt <- querygrain(jMAR, nodes = c("FL"), type = "joint")
+print(round(FLxMARcpt, 2))
+
+jMAR2 <-setEvidence(junction, nodes = "MAR", states = "Absent_MAR")
+FLxMARcpt2 <- querygrain(jMAR2, nodes = c("FL"), type = "joint")
+print(round(FLxMARcpt2, 2))
+```
+
+7. Extreme weather frequency
+
+```{r}
+jEW <- setEvidence(junction, nodes = "EW", states = "Above_Average_EW")
+FLxEWcpt <- querygrain(jEW, nodes = c("FL"), type = "joint")
+print(round(FLxEWcpt, 2))
+
+jEW2 <-setEvidence(junction, nodes = "EW", states = "Below_Average_EW")
+FLxEWcpt2 <- querygrain(jEW2, nodes = c("FL"), type = "joint")
+print(round(FLxEWcpt2, 2))
+```
+
+8. Ice Jam frequency
+
+```{r}
+jIJ <- setEvidence(junction, nodes = "IJ", states = "Above_Average_IJ")
+FLxIJcpt <- querygrain(jIJ, nodes = c("FL"), type = "joint")
+print(round(FLxIJcpt, 2))
+
+jIJ2 <- setEvidence(junction, nodes = "IJ", states = "Below_Average_IJ")
+FLxIJcpt2 <- querygrain(jIJ2, nodes = c("FL"), type = "joint")
+print(round(FLxIJcpt2, 2))
+```
+
+
