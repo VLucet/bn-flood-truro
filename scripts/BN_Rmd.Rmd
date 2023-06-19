@@ -1,6 +1,6 @@
 ---
 title: "BN_Analysis"
-author: "Imogen Hobbs"
+author: "Imogen Hobbs & Valentin Lucet"
 date: "28/12/2021"
 output:
   pdf_document: default
@@ -30,7 +30,7 @@ library(bnlearn)
 
 ```{r}
 # The path to data is relative to where the mrd file is located
-excel_path <- "../data/2Markov_Blankets.xlsx"
+excel_path <- "../data/Markov_Blankets.xlsx"
 # excel_path <- "/Users/imogenhobbs/Library/Mobile Documents/com~apple~CloudDocs/Theme 1 ResNet/MSc_Renewable_Resources/R/data/2Markov_Blankets.xlsx"
 
 # Get all the sheet names
