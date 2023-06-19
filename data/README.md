@@ -4,7 +4,7 @@
 
 **format**: Excel .xlsx file
 
-The file contains the Conditional Probability Tables resulting from the data collection and expert consultation process. The data is in the form of a multi-sheet excel file. Each sheet contains a single CPT.
+The file contains the Conditional Probability Tables used in the analysis file [`1_analyse_BN_truro.Rmd`](https://github.com/VLucet/bn-flood-truro/blob/main/scripts/1_analyse_BN_truro.Rmd). These results from a  data collection and expert consultation process. Experts were surveyed for variables relevant to Flood Risk, along with possible states for these variables. Then they were prompted to generate prior probabilities for each of those states, and the resulting probabilities were refined during repeat consultations. The data is in the form of a multi-sheet excel file. Each sheet contains a single CPT.
 
 There are 5 sheets for the root nodes of the Bayesian Network. The rows corresponds to the possible states of the nodes (limited to 2 per node, for example, "Expansion" and "Return_to_Marshland"), and the single column ("Probability") holds the prior probability associated with that state. The sheets are:
 
