@@ -173,12 +173,12 @@ print(round(FLxDMNTcpt2, 2))
 4. Financial Constraints
 
 ```{r}
-jFC <- setEvidence(junction, nodes = "FC", states = "Above_Average")
+jFC <- setEvidence(junction, nodes = "FC", states = "Above_Average_FC")
 FLxFCcpt <- querygrain(jFC, nodes = c("FL"), type = "joint")
 print(round(FLxFCcpt, 2))
 
-jFC2 <-setEvidence(junction, nodes = "FC", states = "Below_Average")
-FLxFCcpt2 <- querygrain(jDMNT2, nodes = c("FL"), type = "joint")
+jFC2 <-setEvidence(junction, nodes = "FC", states = "Below_Average_FC")
+FLxFCcpt2 <- querygrain(jFC2, nodes = c("FL"), type = "joint")
 print(round(FLxFCcpt2, 2))
 ```
 
