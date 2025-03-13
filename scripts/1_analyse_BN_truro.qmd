@@ -22,7 +22,7 @@ library(bnlearn)
 
 ```{r}
 # The path to data is relative to where the mrd file is located
-excel_path <- "../data/Markov_Blankets.xlsx"
+excel_path <- "data/Markov_Blankets.xlsx"
 # excel_path <- "/Users/imogenhobbs/Library/Mobile Documents/com~apple~CloudDocs/Theme 1 ResNet/MSc_Renewable_Resources/R/data/2Markov_Blankets.xlsx"
 
 # Get all the sheet names
@@ -50,7 +50,7 @@ We want to transform the data into probability tables for bnlearn
 - tables 7-8: is 3 and 4-way so more wrangling is needed
 
 ```{r}
-source("0_functions.R")
+source("scripts/0_functions.R")
 ```
 
 We apply the function `clean_tables` to all the sheets.
@@ -257,11 +257,11 @@ evidences_dfs <- lapply(evidences, function(x){
 })
 all_evidence <- dplyr::bind_rows(evidences_dfs)
 
-all_evidence_ar <- as.data.frame(table(all_evidence)) %>% 
+all_evidence_ar <- as.data.frame(table(all_evidence)) |> 
     dplyr::arrange(desc(Freq), nodes, decreasing = F)
 
-filtered <- all_evidence_ar %>% 
-  dplyr::mutate(imp = Freq/length(bests)*100) %>% 
+filtered <- all_evidence_ar |> 
+  dplyr::mutate(imp = Freq/length(bests)*100) |> 
   dplyr::filter(Freq !=0)
 
 print(filtered)
