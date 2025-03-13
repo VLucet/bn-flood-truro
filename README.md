@@ -47,7 +47,8 @@ fit in other risk management settings.*
 
 Alternatively, you can download and open the [knitted html
 file](https://github.com/VLucet/bn-flood-truro/blob/main/docs/index.html)
-resulting from the markdown file.
+resulting from the markdown file, or consult the output on the [github
+page](http://valentinlucet.com/bn-flood-truro/scripts/1_analyse_BN_truro.html).
 
 ### Data format
 

@@ -6,8 +6,8 @@ project:
   execute-dir: project
 
 website:
-  title: "ROF Camera Trap Project"
-  sidebar:
+  title: "Measuring the degree of ‘fit’ within social-ecological systems to support local decision-making"
+  navbar:
     style: "docked"
     contents:
       - href: scripts/1_analyse_BN_truro.qmd

@@ -28,7 +28,7 @@ _Effective social-ecological fit is considered essential for properly managing s
 2. Use `renv::restore` to install all the packages necessary for this analysis. Note that you may need to install BioConductor packages manually as prompted.
 5. Run the [`1_analyse_BN_truro.Rmd`](https://github.com/VLucet/bn-flood-truro/blob/main/scripts/1_analyse_BN_truro.Rmd) file.
 
-Alternatively, you can download and open the [knitted html file](https://github.com/VLucet/bn-flood-truro/blob/main/docs/index.html) resulting from the markdown file.
+Alternatively, you can download and open the [knitted html file](https://github.com/VLucet/bn-flood-truro/blob/main/docs/index.html) resulting from the markdown file, or consult the output on the [github page](http://valentinlucet.com/bn-flood-truro/scripts/1_analyse_BN_truro.html).
 
 ### Data format
 
