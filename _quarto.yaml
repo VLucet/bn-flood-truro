@@ -1,0 +1,19 @@
+project:
+  type: website
+  output-dir: docs
+  render:
+    - "*.qmd"
+  execute-dir: project
+
+website:
+  title: "ROF Camera Trap Project"
+  sidebar:
+    style: "docked"
+    contents:
+      - href: scripts/1_analyse_BN_truro.qmd
+        text: Load and Analyse Truro Network
+
+format:
+  html:
+    theme: cosmo
+    toc: true
